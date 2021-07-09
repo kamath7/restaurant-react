@@ -1,12 +1,12 @@
-
+import React from 'react';
+import Header from './components/Layout/Header';
 import './App.css';
 
 function App() {
   return (
-    <div className="App">
-        <h1>Let's Order Food!</h1>
-        <p>JK. I'm broke. Will settle with water</p>
-    </div>
+    <React.Fragment>
+      <Header/>
+    </React.Fragment>
   );
 }
 
