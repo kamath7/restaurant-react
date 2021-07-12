@@ -12,13 +12,13 @@ function App() {
     setCartIsShown(false);
   };
   return (
-    <React.Fragment>
+    <CartProvider>
       {cartIsShown && <Cart onClose={hideCartHandler} />}
       <Header onShowCartHandler={showCartHandler} />
       <main>
         <Meals />
       </main>
-    </React.Fragment>
+    </CartProvider>
   );
 }
 
