@@ -15,9 +15,10 @@ const cartReducer = (state, action) => {
         items: updatedItems,
         totalAmount: updatedTotalAmt,
       };
-      break;
+
+    default:
+      return defaultCartState;
   }
-  return defaultCartState;
 };
 const CartProvider = (props) => {
   const [cartState, dispatch] = useReducer(cartReducer, defaultCartState);
