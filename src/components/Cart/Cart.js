@@ -6,8 +6,12 @@ import classes from "./Cart.module.css";
 const Cart = (props) => {
   const cartCtx = useContext(CartContext);
   const hasItems = cartCtx.items.length > 0;
-  const cartItemRemoveHandler = (id)=>{};
-  const cartItemAddHandler = (item)=>{}
+  const cartItemRemoveHandler = (id) => {
+    cartCtx.removeItem(id);
+  };
+  const cartItemAddHandler = (item) => {
+    cartCtx.addItem({ ...item, amount: 1 });
+  };
   return (
     <Modal onClose={props.onClose}>
       <ul className={classes["cart-items"]}>
@@ -18,7 +22,7 @@ const Cart = (props) => {
             amount={item.amount}
             price={item.price}
             onRemove={cartItemRemoveHandler.bind(null, item.id)}
-            onAdd={cartItemAddHandler.bind(null,item)}
+            onAdd={cartItemAddHandler.bind(null, item)}
           />
         ))}
       </ul>
