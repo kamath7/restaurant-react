@@ -8,49 +8,53 @@ const defaultCartState = {
 const cartReducer = (state, action) => {
   switch (action.type) {
     case "ADD_ITEM":
-      const updatedTotalAmt =
+      const updatedTotalAmount1 =
         state.totalAmount + action.payload.price * action.payload.amount;
-      const existingCartItemInd = state.items.findIndex(
+
+      const existingCartItemIndex = state.items.findIndex(
         (item) => item.id === action.payload.id
       );
-      const existingCartItem = state.item[existingCartItemInd];
-
+      const existingCartItem = state.items[existingCartItemIndex];
       let updatedItems;
+
       if (existingCartItem) {
         const updatedItem = {
           ...existingCartItem,
           amount: existingCartItem.amount + action.payload.amount,
         };
         updatedItems = [...state.items];
-        updatedItems[existingCartItemInd] = updatedItem;
+        updatedItems[existingCartItemIndex] = updatedItem;
       } else {
         updatedItems = state.items.concat(action.payload);
       }
+
       return {
         items: updatedItems,
-        totalAmount: updatedTotalAmt,
+        totalAmount: updatedTotalAmount1,
       };
     case "REMOVE_ITEM":
-      const existingCartItemIndRemove = state.items.findIndex(
+      const existingCartItemIndex2 = state.items.findIndex(
         (item) => item.id === action.payload
       );
-      const existingCartItemRemove = state.items[existingCartItemIndRemove];
-      const updatedTotalAmount =
-        state.totalAmount - existingCartItemRemove.price;
+      const existingItem = state.items[existingCartItemIndex2];
+      const updatedTotalAmount2 = state.totalAmount - existingItem.price;
       let updatedItems1;
-      if (existingCartItemRemove.amount === 1) {
-        updatedItems1 = state.items.filter((item) => item.id !== action.payload);
+      if (existingItem.amount === 1) {
+        updatedItems1 = state.items.filter(
+          (item) => item.id !== action.payload
+        );
       } else {
-        const updatedItem = {
-          ...existingCartItemRemove,
-          amount: existingCartItemRemove.amount - 1,
+        const updatedItem1 = {
+          ...existingItem,
+          amount: existingItem.amount - 1,
         };
         updatedItems1 = [...state.items];
-        updatedItems1[existingCartItemIndRemove] = updatedItem;
+        updatedItems1[existingCartItemIndex2] = updatedItem1;
       }
+
       return {
         items: updatedItems1,
-        totalAmount: updatedTotalAmount,
+        totalAmount: updatedTotalAmount2,
       };
     default:
       return defaultCartState;
