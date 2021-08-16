@@ -6,12 +6,15 @@ import MealItem from "./MealItem/MealItem";
 
 const AvailableMeals = () => {
   const [meals, setMeals] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
   useEffect(() => {
+    setIsLoading(true);
     const fetchMeals = async () => {
       const response = await fetch(
         `${process.env.REACT_APP_FIREBASE_URL}meals.json`
       );
-      console.log(response)
+      console.log(response);
       const responseData = await response.json();
       const loadedMeals = [];
 
@@ -24,25 +27,34 @@ const AvailableMeals = () => {
         });
       }
       setMeals(loadedMeals);
+      setIsLoading(false);
     };
     fetchMeals();
   }, []);
 
-  return (
-    <section className={classes.meals}>
-      <Card>
-        {meals.map((meal) => (
-          <MealItem
-            key={meal.id}
-            id={meal.id}
-            name={meal.name}
-            description={meal.description}
-            price={meal.price}
-          />
-        ))}
-      </Card>
-    </section>
-  );
+  if (isLoading) {
+    return (
+      <section className={classes.MealsLoading}>
+        <p>Loading</p>
+      </section>
+    );
+  } else {
+    return (
+      <section className={classes.meals}>
+        <Card>
+          {meals.map((meal) => (
+            <MealItem
+              key={meal.id}
+              id={meal.id}
+              name={meal.name}
+              description={meal.description}
+              price={meal.price}
+            />
+          ))}
+        </Card>
+      </section>
+    );
+  }
 };
 
 export default AvailableMeals;
