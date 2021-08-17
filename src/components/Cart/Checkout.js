@@ -1,5 +1,9 @@
 import React, { useRef } from "react";
 import classes from "./Checkout.module.css";
+
+const isEmpty = (value) => value.trim() === "";
+const pinCodeLengthFail = (value) => value.trim().length !== 6;
+
 const Checkout = (props) => {
   const nameInputRef = useRef();
   const steetInputRef = useRef();
@@ -12,6 +16,18 @@ const Checkout = (props) => {
     const enteredStreet = streetInputRef.current.value;
     const enteredPostal = postalInputRef.current.value;
     const enteredCity = cityInputRef.current.value;
+
+    const enteredNameValid = !isEmpty(enteredName);
+    const enteredStreetValid = !isEmpty(enteredStreet);
+    const enteredPostalValid = !pinCodeLengthFail(enteredPostal);
+    const enteredCityValid = !isEmpty(enteredCity);
+
+    const formIsValid =
+      enteredNameValid &&
+      enteredStreetValid &&
+      enteredPostalValid &&
+      enteredCityValid;
+      
   };
   return (
     <form>
