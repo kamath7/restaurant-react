@@ -17,6 +17,15 @@ const Cart = (props) => {
   const orderHandler = () => {
     setIsCheckedOut(true);
   };
+  const submitOrderHandler = (userData)=>{
+    fetch(`${process.env.REACT_APP_FIREBASE_URL}orders.json`,{
+      method:'POST',
+      body: JSON.stringify({
+        user:userData,
+        orderedItems: cartCtx.items
+      })
+    })
+  }
   return (
     <Modal onClose={props.onClose}>
       <ul className={classes["cart-items"]}>
@@ -35,7 +44,7 @@ const Cart = (props) => {
         <span>Total Amount</span>
         <span>{`₹ ${cartCtx.totalAmount.toFixed(2)}`}</span>
       </div>
-      {isCheckedOut && <Checkout onCancel={props.onClose} />}
+      {isCheckedOut && <Checkout onConfirm={submitOrderHandler} onCancel={props.onClose} />}
       {!isCheckedOut && (
         <div className={classes.actions}>
           <button className={classes["button--alt"]} onClick={props.onClose}>
