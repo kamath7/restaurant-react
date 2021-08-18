@@ -56,6 +56,8 @@ const cartReducer = (state, action) => {
         items: updatedItems1,
         totalAmount: updatedTotalAmount2,
       };
+    case "CLEAR":
+      return defaultCartState;
     default:
       return defaultCartState;
   }
