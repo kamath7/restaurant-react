@@ -6,6 +6,8 @@ import classes from "./Cart.module.css";
 import Checkout from "./Checkout";
 const Cart = (props) => {
   const [isCheckedOut, setIsCheckedOut] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [didSubmit, setDidSubmit] = useState(false);
   const cartCtx = useContext(CartContext);
   const hasItems = cartCtx.items.length > 0;
   const cartItemRemoveHandler = (id) => {
@@ -17,17 +19,20 @@ const Cart = (props) => {
   const orderHandler = () => {
     setIsCheckedOut(true);
   };
-  const submitOrderHandler = (userData) => {
-    fetch(`${process.env.REACT_APP_FIREBASE_URL}orders.json`, {
+  const submitOrderHandler = async (userData) => {
+    setIsSubmitting(true);
+    await fetch(`${process.env.REACT_APP_FIREBASE_URL}orders.json`, {
       method: "POST",
       body: JSON.stringify({
         user: userData,
         orderedItems: cartCtx.items,
       }),
     });
+    setIsSubmitting(false);
+    setDidSubmit(true);
   };
-  return (
-    <Modal onClose={props.onClose}>
+  const cartModalContent = (
+    <React.Fragment>
       <ul className={classes["cart-items"]}>
         {cartCtx.items.map((item) => (
           <CartItem
@@ -59,6 +64,24 @@ const Cart = (props) => {
           )}
         </div>
       )}
+    </React.Fragment>
+  );
+  const isSubmittingModalContent = <p>Placing your Order ...</p>;
+  const successOrder = (
+    <React.Fragment>
+      <p>Order succesfully placed!</p>
+      <div className={classes.actions}>
+        <button className={classes.button} onClick={props.onClose}>
+          Close
+        </button>{" "}
+      </div>
+    </React.Fragment>
+  );
+  return (
+    <Modal onClose={props.onClose}>
+      {!isSubmitting && !didSubmit && cartModalContent}
+      {isSubmitting && isSubmittingModalContent}
+      {!isSubmitting && didSubmit && successOrder}
     </Modal>
   );
 };
